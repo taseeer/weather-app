@@ -1,4 +1,3 @@
-# app.py (same as before, no changes needed) ok
 from flask import Flask, render_template, request
 import requests
 from datetime import datetime, timedelta
