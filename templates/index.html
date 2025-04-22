@@ -2,114 +2,381 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Weather App</title>
+    <title>Weather Forecast</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --day-bg-1: #74ebd5;
+            --day-bg-2: #ACB6E5;
+            --night-bg-1: #0F2027;
+            --night-bg-2: #203A43;
+            --night-bg-3: #2C5364;
+            --card-bg-day: rgba(255, 255, 255, 0.85);
+            --card-bg-night: rgba(30, 39, 46, 0.85);
+            --text-day: #2d3436;
+            --text-night: #f5f6fa;
+            --primary: #3498db;
+            --secondary: #f39c12;
+        }
+
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            transition: background 0.5s;
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-day);
+            transition: all 0.5s ease;
         }
 
         body.day {
-            background: linear-gradient(to bottom right, #74ebd5, #ACB6E5);
-            color: #333;
+            background: linear-gradient(-45deg, var(--day-bg-1), var(--day-bg-2));
         }
 
         body.night {
-            background: linear-gradient(to bottom right, #2c3e50, #4ca1af);
-            color: #f0f0f0;
+            background: linear-gradient(-45deg, var(--night-bg-1), var(--night-bg-2), var(--night-bg-3));
+            color: var(--text-night);
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .container {
-            text-align: center;
-            padding: 30px;
-            border-radius: 15px;
-            background-color: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            max-width: 400px;
             width: 90%;
+            max-width: 1200px;
+            margin: 2rem auto;
+            animation: fadeIn 0.8s ease-out;
         }
 
-        body.night .container {
-            background-color: rgba(44, 62, 80, 0.9);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        h1 {
-            margin-bottom: 20px;
+        .search-box {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            position: relative;
         }
 
-        form input {
-            padding: 10px;
-            font-size: 16px;
-            width: 70%;
-            margin-right: 5px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-        }
-
-        form button {
-            padding: 10px 15px;
-            font-size: 16px;
-            background-color: #007BFF;
+        .search-box input {
+            width: 100%;
+            max-width: 500px;
+            padding: 15px 25px;
             border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-box button {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background: var(--primary);
             color: white;
-            border-radius: 8px;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
             cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
 
-        form button:hover {
-            background-color: #0056b3;
+        .search-box button:hover {
+            background: #2980b9;
+            transform: translateX(-5px);
         }
 
-        .weather-box {
-            margin-top: 20px;
+        .weather-card {
+            background: var(--card-bg-day);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
         }
 
-        .weather-box img {
+        body.night .weather-card {
+            background: var(--card-bg-night);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .weather-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .current-weather {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .location-time h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .location-time .time {
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+
+        body.night .location-time .time {
+            color: #bdc3c7;
+        }
+
+        .weather-icon {
+            text-align: center;
+        }
+
+        .weather-icon img {
+            width: 120px;
+            height: 120px;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));
+        }
+
+        .weather-info {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+
+        .weather-info-item {
+            padding: 0 1rem;
+        }
+
+        .weather-info-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .weather-info-item p {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        body.night .weather-info-item p {
+            color: #bdc3c7;
+        }
+
+        .forecast-title {
+            text-align: center;
+            margin: 2rem 0;
+            font-size: 1.5rem;
+            position: relative;
+        }
+
+        .forecast-title:after {
+            content: '';
+            display: block;
             width: 100px;
+            height: 3px;
+            background: var(--secondary);
+            margin: 10px auto;
+            border-radius: 3px;
         }
 
-        .description {
-            font-size: 18px;
+        .forecast-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .forecast-day {
+            background: var(--card-bg-day);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        body.night .forecast-day {
+            background: var(--card-bg-night);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .forecast-day:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .forecast-day h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .forecast-day img {
+            width: 70px;
+            height: 70px;
+            margin: 0.5rem 0;
+            filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.2));
+        }
+
+        .forecast-day .temp-range {
+            font-size: 1.2rem;
             font-weight: 500;
+            margin: 0.5rem 0;
+        }
+
+        .forecast-day .description {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        body.night .forecast-day .description {
+            color: #bdc3c7;
         }
 
         .error {
-            color: red;
-            margin-top: 15px;
+            text-align: center;
+            color: #e74c3c;
+            margin-top: 1rem;
+            font-weight: 500;
+            animation: shake 0.5s;
         }
 
-        .time {
-            margin-top: 5px;
-            font-style: italic;
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        @media (max-width: 768px) {
+            .current-weather {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .weather-info {
+                flex-direction: column;
+            }
+
+            .weather-info-item {
+                margin-bottom: 1rem;
+            }
+
+            .forecast-container {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+
+        /* Animated weather icons */
+        .weather-icon i {
+            font-size: 5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body class="{{ 'day' if weather_data and weather_data.is_day else 'night' }}">
     <div class="container">
-        <h1>Real-Time Weather App</h1>
-        <form method="POST" onsubmit="return validateInput()">
-            <input type="text" name="city" placeholder="Enter city name" required>
-            <button type="submit">Get Weather</button>
-        </form>
+        <div class="search-box">
+            <form method="POST" onsubmit="return validateInput()">
+                <input type="text" name="city" placeholder="Search for a city..." value="{{ weather_data.city if weather_data else '' }}" required>
+                <button type="submit"><i class="fas fa-search"></i> Search</button>
+            </form>
+        </div>
+
         {% if error %}
-            <p class="error">{{ error }}</p>
-        {% elif weather_data %}
-            <div class="weather-box">
-                <h2>{{ weather_data.city }}, {{ weather_data.country }}</h2>
-                <p class="time">{{ weather_data.time }} (Local Time)</p>
-                <img src="http://openweathermap.org/img/wn/{{ weather_data.icon }}@2x.png" alt="Weather icon">
-                <p class="description">{{ weather_data.description }}</p>
-                <p>Temperature: {{ weather_data.temperature }}°C</p>
-                <p>Feels like: {{ weather_data.feels_like }}°C</p>
-                <p>Humidity: {{ weather_data.humidity }}%</p>
-                <p>Wind Speed: {{ weather_data.wind_speed }} m/s</p>
+            <div class="error">
+                <i class="fas fa-exclamation-circle"></i> {{ error }}
             </div>
+        {% elif weather_data %}
+            <div class="weather-card">
+                <div class="current-weather">
+                    <div class="location-time">
+                        <h2>{{ weather_data.city }}, {{ weather_data.country }}</h2>
+                        <p class="time"><i class="far fa-clock"></i> {{ weather_data.time }} (Local Time)</p>
+                    </div>
+                    <div class="weather-icon">
+                        <img src="http://openweathermap.org/img/wn/{{ weather_data.icon }}@4x.png" alt="Weather icon">
+                    </div>
+                </div>
+
+                <div class="weather-info">
+                    <div class="weather-info-item">
+                        <h3>{{ weather_data.temperature }}°C</h3>
+                        <p>Temperature</p>
+                    </div>
+                    <div class="weather-info-item">
+                        <h3>{{ weather_data.feels_like }}°C</h3>
+                        <p>Feels Like</p>
+                    </div>
+                    <div class="weather-info-item">
+                        <h3>{{ weather_data.humidity }}%</h3>
+                        <p>Humidity</p>
+                    </div>
+                    <div class="weather-info-item">
+                        <h3>{{ weather_data.wind_speed }} m/s</h3>
+                        <p>Wind Speed</p>
+                    </div>
+                </div>
+            </div>
+
+            {% if forecast_data %}
+            <h2 class="forecast-title">5-Day Forecast</h2>
+            <div class="forecast-container">
+                {% for day in forecast_data %}
+                <div class="forecast-day">
+                    <h3>{{ day.day_name }}</h3>
+                    <p>{{ day.date.split(', ')[1] }}</p>
+                    <img src="http://openweathermap.org/img/wn/{{ day.icon }}@2x.png" alt="Weather icon">
+                    <div class="temp-range">{{ day.temp_min }}° / {{ day.temp_max }}°</div>
+                    <p class="description">{{ day.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
         {% endif %}
     </div>
 
@@ -117,11 +384,21 @@
         function validateInput() {
             const input = document.querySelector('input[name="city"]');
             if (!input.value.trim()) {
-                alert("Please enter a city.");
+                alert("Please enter a city name.");
                 return false;
             }
             return true;
         }
+
+        // Add animation when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.querySelector('.container');
+            container.style.opacity = '0';
+            setTimeout(() => {
+                container.style.transition = 'opacity 0.8s ease-out';
+                container.style.opacity = '1';
+            }, 100);
+        });
     </script>
 </body>
 </html>
