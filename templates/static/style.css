@@ -1,0 +1,80 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom right, #74ebd5, #ACB6E5);
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+body.night {
+    background: linear-gradient(to bottom right, #2c3e50, #4ca1af);
+    color: #f0f0f0;
+}
+
+.container {
+    text-align: center;
+    padding: 30px;
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    max-width: 400px;
+    width: 90%;
+}
+
+body.night .container {
+    background-color: rgba(44, 62, 80, 0.9);
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+form input {
+    padding: 10px;
+    font-size: 16px;
+    width: 70%;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+form button {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #007BFF;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+.weather-box {
+    margin-top: 20px;
+}
+
+.weather-box img {
+    width: 100px;
+}
+
+.description {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.error {
+    color: red;
+    margin-top: 15px;
+}
+
+.time {
+    margin-top: 5px;
+    font-style: italic;
+}
